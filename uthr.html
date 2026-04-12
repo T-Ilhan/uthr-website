@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>UTHR — University of Toronto Humanoid Robotics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --black:   #060509;
+  --deep:    #0a0812;
+  --surface: #0f0d1a;
+  --surf2:   #141022;
+  --line:    rgba(255,255,255,0.07);
+  --line-hi: rgba(255,255,255,0.13);
+  --purple:  #4c1d95;
+  --violet:  #6d28d9;
+  --bright:  #8b5cf6;
+  --lilac:   #c4b5fd;
+  --white:   #ffffff;
+  --off:     #f0ecff;
+  --mid:     #8b85a0;
+  --dim:     #3d3955;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--black);color:var(--off);font-family:'Inter',-apple-system,sans-serif;font-weight:300;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+
+/* GRAIN */
+body::after{content:'';position:fixed;inset:0;z-index:996;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23g)'/%3E%3C/svg%3E");opacity:0.028;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:900;display:flex;align-items:center;justify-content:space-between;padding:1.5rem 3rem;transition:padding .4s,background .4s,border-color .4s;border-bottom:1px solid transparent;}
+nav.stuck{padding:1rem 3rem;background:rgba(6,5,9,0.92);backdrop-filter:blur(28px) saturate(1.4);border-color:var(--line);}
+.nav-logo{font-size:.75rem;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--white);text-decoration:none;}
+.nav-logo b{color:var(--lilac);}
+.nav-links{display:flex;align-items:center;gap:2.8rem;list-style:none;}
+.nav-links a{font-size:.7rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--mid);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--white);}
+.nav-btn{font-size:.68rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--off);border:1px solid var(--line-hi);padding:.55rem 1.4rem;text-decoration:none;transition:all .25s;background:none;}
+.nav-btn:hover{background:var(--white);color:var(--black);border-color:var(--white);}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;flex-direction:column;position:relative;overflow:hidden;}
+.hero-ambient{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 65% at 78% 15%,rgba(76,29,149,.55) 0%,transparent 58%),radial-gradient(ellipse 35% 45% at 15% 80%,rgba(109,40,217,.2) 0%,transparent 55%);}
+.hero-grid{position:absolute;inset:0;overflow:hidden;opacity:.04;pointer-events:none;}
+.hero-grid::before{content:'';position:absolute;inset:-10%;background-image:linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);background-size:72px 72px;mask-image:radial-gradient(ellipse 70% 60% at 72% 25%,black 0%,transparent 75%);}
+
+.hero-main{flex:1;display:flex;flex-direction:column;justify-content:center;padding:11rem 3rem 4rem;position:relative;z-index:2;}
+.hero-label{display:inline-flex;align-items:center;gap:.75rem;font-family:'Geist Mono',monospace;font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;color:var(--lilac);margin-bottom:2.4rem;opacity:0;animation:up .8s .1s forwards;}
+.hero-label-tick{width:1px;height:14px;background:var(--bright);opacity:.7;}
+
+.hero-h1{font-size:clamp(2.8rem,6.5vw,6.5rem);font-weight:300;line-height:.95;letter-spacing:-.03em;color:var(--white);max-width:1050px;opacity:0;animation:up 1s .22s forwards;}
+.hero-h1 strong{font-weight:600;display:block;}
+.hero-h1 .stroke{color:transparent;-webkit-text-stroke:1px rgba(196,181,253,.3);display:block;}
+
+.hero-tagline{margin-top:2rem;font-family:'Geist Mono',monospace;font-size:clamp(.72rem,1.3vw,.9rem);letter-spacing:.12em;text-transform:uppercase;color:var(--lilac);opacity:0;animation:up .8s .4s forwards;}
+.hero-sub{margin-top:1.2rem;font-size:1.05rem;line-height:1.75;color:var(--mid);max-width:460px;font-weight:400;opacity:0;animation:up .8s .55s forwards;}
+.hero-ctas{margin-top:3rem;display:flex;align-items:center;gap:1.4rem;opacity:0;animation:up .8s .7s forwards;}
+
+.btn-fill{font-size:.72rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;background:var(--white);color:var(--black);padding:.95rem 2.4rem;text-decoration:none;transition:all .25s;display:inline-block;border:none;cursor:pointer;}
+.btn-fill:hover{background:var(--off);transform:translateY(-2px);}
+.btn-outline{font-size:.72rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;border:1px solid var(--line-hi);color:var(--mid);padding:.95rem 2.4rem;text-decoration:none;transition:all .25s;display:inline-block;}
+.btn-outline:hover{border-color:rgba(255,255,255,.4);color:var(--white);}
+
+.hero-bar{position:relative;z-index:2;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);opacity:0;animation:up .7s .9s forwards;}
+.hero-bar-item{padding:1.8rem 2.5rem;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:.35rem;transition:background .3s;}
+.hero-bar-item:last-child{border-right:none;}
+.hero-bar-item:hover{background:rgba(255,255,255,.02);}
+.bar-num{font-size:1.7rem;font-weight:300;letter-spacing:-.03em;color:var(--white);line-height:1;}
+.bar-num b{font-weight:600;color:var(--lilac);}
+.bar-label{font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);}
+
+@keyframes up{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+/* DIVIDERS */
+.hr{width:100%;height:1px;background:var(--line);}
+.hr-purple{width:100%;height:1px;background:linear-gradient(to right,transparent,var(--violet),transparent);opacity:.4;}
+
+/* SECTIONS */
+.section{padding:9rem 3rem;}
+.section.alt{background:var(--surface);}
+
+.kicker{font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--lilac);display:flex;align-items:center;gap:.7rem;margin-bottom:1rem;}
+.kicker::before{content:'';width:20px;height:1px;background:var(--bright);opacity:.6;}
+.section-title{font-size:clamp(2.2rem,4.5vw,4rem);font-weight:300;letter-spacing:-.03em;line-height:1.05;color:var(--white);margin-bottom:1rem;}
+.section-title b{font-weight:600;}
+
+/* ABOUT */
+.about-header{text-align:center;margin-bottom:4rem;}
+.about-header .kicker{justify-content:center;}
+.about-wrap{display:grid;grid-template-columns:1fr 1px 1fr;gap:0;max-width:1200px;}
+.about-rule{background:var(--line);}
+.about-left{padding-right:5rem;}
+.about-right{padding-left:5rem;}
+.about-body{font-size:1rem;line-height:1.85;color:var(--mid);margin-bottom:1.2rem;font-weight:400;}
+.about-body b{color:var(--off);font-weight:500;}
+.pill{display:inline-flex;align-items:center;gap:.55rem;margin-top:.5rem;font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--lilac);border:1px solid rgba(139,92,246,.25);padding:.38rem .9rem;background:rgba(139,92,246,.06);}
+.pill-dot{width:5px;height:5px;border-radius:50%;background:var(--bright);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.25;}}
+
+.stat-list{display:flex;flex-direction:column;}
+.stat-item{display:flex;align-items:center;justify-content:space-between;padding:1.8rem 0;border-bottom:1px solid var(--line);transition:padding-left .3s;}
+.stat-item:first-child{border-top:1px solid var(--line);}
+.stat-item:hover{padding-left:.7rem;}
+.stat-val{font-size:2.6rem;font-weight:300;letter-spacing:-.04em;color:var(--white);line-height:1;}
+.stat-val b{font-weight:600;color:var(--lilac);}
+.stat-desc{font-size:.78rem;color:var(--dim);text-align:right;max-width:150px;line-height:1.5;font-weight:400;}
+
+/* SUBTEAMS */
+.subteams-header{text-align:center;margin-bottom:4rem;}
+.subteams-header .kicker{justify-content:center;}
+.subteams-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);max-width:1300px;}
+.subteam-card{background:var(--black);padding:3rem 2.6rem;position:relative;overflow:hidden;transition:background .35s;}
+.subteam-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,var(--violet),var(--lilac));transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.16,1,.3,1);}
+.subteam-card:hover{background:var(--surf2);}
+.subteam-card:hover::before{transform:scaleX(1);}
+.card-index{font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);margin-bottom:1.8rem;display:block;}
+.card-title{font-size:1.3rem;font-weight:600;letter-spacing:-.02em;color:var(--white);margin-bottom:.9rem;line-height:1.1;}
+.card-body{font-size:.88rem;line-height:1.75;color:var(--mid);font-weight:400;}
+.card-tags{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:2rem;}
+.card-tag{font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;color:var(--lilac);border:1px solid rgba(196,181,253,.18);padding:.18rem .6rem;background:rgba(196,181,253,.04);}
+
+/* SPONSORS */
+.sponsors-center{max-width:700px;margin:0 auto;text-align:center;}
+.sponsors-body{font-size:1rem;line-height:1.8;color:var(--mid);max-width:520px;margin:0 auto 4rem;font-weight:400;}
+.coming-frame{border:1px solid rgba(139,92,246,.2);padding:5rem 3rem;background:rgba(109,40,217,.04);margin-bottom:3rem;position:relative;overflow:hidden;}
+.coming-frame::after{content:'PARTNERS';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:6rem;font-weight:700;letter-spacing:.18em;color:rgba(139,92,246,.05);white-space:nowrap;pointer-events:none;}
+.coming-chip{display:inline-flex;align-items:center;gap:.5rem;font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--lilac);border:1px solid rgba(139,92,246,.25);padding:.3rem .9rem;margin-bottom:1.6rem;}
+.coming-head{font-size:1.4rem;font-weight:600;letter-spacing:-.02em;color:var(--white);margin-bottom:.9rem;}
+.coming-desc{font-size:.92rem;line-height:1.75;color:var(--mid);max-width:400px;margin:0 auto;}
+.cta-sub{font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);margin-bottom:.9rem;}
+
+/* JOIN */
+.join-layout{display:grid;grid-template-columns:1fr 1fr;gap:8rem;align-items:start;max-width:1200px;}
+.join-sticky{position:sticky;top:7rem;}
+.join-pitch{font-size:1rem;line-height:1.85;color:var(--mid);margin-bottom:2.5rem;font-weight:400;}
+.reasons{display:flex;flex-direction:column;}
+.reason{display:flex;gap:1.2rem;padding:1.4rem 0;border-bottom:1px solid var(--line);}
+.reason:first-child{border-top:1px solid var(--line);}
+.reason-mark{width:5px;height:5px;border-radius:50%;background:var(--bright);flex-shrink:0;margin-top:.45rem;}
+.reason-text{font-size:.9rem;color:var(--mid);line-height:1.65;}
+.reason-text b{color:var(--off);font-weight:500;}
+
+.form{display:flex;flex-direction:column;gap:1.3rem;}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:1.3rem;}
+.f-field{display:flex;flex-direction:column;gap:.5rem;}
+.f-label{font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--lilac);}
+.f-input,.f-select,.f-textarea{background:rgba(255,255,255,.03);border:1px solid var(--line);color:var(--off);padding:.88rem 1rem;font-family:'Inter',sans-serif;font-size:.9rem;font-weight:400;outline:none;transition:border-color .2s,background .2s;width:100%;appearance:none;}
+.f-input::placeholder,.f-textarea::placeholder{color:var(--dim);}
+.f-input:focus,.f-select:focus,.f-textarea:focus{border-color:rgba(139,92,246,.45);background:rgba(255,255,255,.05);}
+.f-select option{background:var(--deep);}
+.f-textarea{resize:vertical;min-height:115px;}
+
+/* FOOTER */
+footer{border-top:1px solid var(--line);padding:2.8rem 3rem;display:flex;align-items:center;justify-content:space-between;}
+.f-logo{font-size:.72rem;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--mid);}
+.f-logo b{color:var(--lilac);}
+.f-tagline{font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);}
+.f-nav{display:flex;gap:2rem;list-style:none;}
+.f-nav a{font-size:.65rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);text-decoration:none;transition:color .2s;}
+.f-nav a:hover{color:var(--off);}
+
+/* REVEAL */
+.r{opacity:0;transform:translateY(24px);transition:opacity .75s ease,transform .75s ease;}
+.r.in{opacity:1;transform:none;}
+.r.d1{transition-delay:.1s;}
+.r.d2{transition-delay:.2s;}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .subteams-grid{grid-template-columns:repeat(2,1fr);}
+  .join-layout{grid-template-columns:1fr;gap:4rem;}
+  .join-sticky{position:static;}
+  .about-wrap{grid-template-columns:1fr;}
+  .about-rule{display:none;}
+  .about-left{padding-right:0;margin-bottom:4rem;}
+  .about-right{padding-left:0;}
+}
+@media(max-width:768px){
+  nav{padding:1.1rem 1.5rem;}
+  .nav-links{display:none;}
+  .section{padding:6rem 1.5rem;}
+  .hero-main{padding:9rem 1.5rem 3rem;}
+  .hero-bar{grid-template-columns:repeat(2,1fr);}
+  .hero-bar-item{padding:1.4rem 1.5rem;}
+  footer{flex-direction:column;gap:1.5rem;text-align:center;}
+  .f-nav{justify-content:center;flex-wrap:wrap;}
+}
+@media(max-width:560px){
+  .subteams-grid{grid-template-columns:1fr;}
+  .f-row{grid-template-columns:1fr;}
+  .hero-ctas{flex-direction:column;align-items:flex-start;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a class="nav-logo" href="#hero">UT<b>HR</b></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#subteams">Subteams</a></li>
+    <li><a href="#sponsors">Sponsors</a></li>
+    <li><a href="#join">Join Us</a></li>
+  </ul>
+  <a class="nav-btn" href="#join">Apply Now</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-ambient"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-main">
+    <div class="hero-label">
+      <span class="hero-label-tick"></span>
+      University of Toronto &nbsp;&mdash;&nbsp; Founded 2026
+      <span class="hero-label-tick"></span>
+    </div>
+    <h1 class="hero-h1">
+      University of<br/>
+      <strong>Toronto Humanoid</strong><br/>
+      <span class="stroke">Robotics</span>
+    </h1>
+    <p class="hero-tagline">Next Chapter of Physical Intelligence in Canada</p>
+    <p class="hero-sub">A student-led engineering team building Canada's first full-scale bipedal humanoid robot at the University of Toronto.</p>
+    <div class="hero-ctas">
+      <a class="btn-fill" href="#join">Join the Team</a>
+      <a class="btn-outline" href="#about">Learn More</a>
+    </div>
+  </div>
+  <div class="hero-bar">
+    <div class="hero-bar-item">
+      <span class="bar-num"><b>2026</b></span>
+      <span class="bar-label">Year Founded</span>
+    </div>
+    <div class="hero-bar-item">
+      <span class="bar-num">6</span>
+      <span class="bar-label">Subteams</span>
+    </div>
+    <div class="hero-bar-item">
+      <span class="bar-num">#<b>1</b></span>
+      <span class="bar-label">Canada First</span>
+    </div>
+    <div class="hero-bar-item">
+      <span class="bar-num">UofT</span>
+      <span class="bar-label">St. George Campus</span>
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- ABOUT -->
+<section class="section alt" id="about">
+  <div class="about-header r">
+    <p class="kicker">About</p>
+    <h2 class="section-title"><b>Who We Are</b></h2>
+  </div>
+  <div class="about-wrap r">
+    <div class="about-left">
+      <p class="about-body"><b>UTHR</b> is the University of Toronto Humanoid Robotics team. We are a multidisciplinary team of engineers, computer scientists, and designers building Canada's first full-scale bipedal humanoid robot from the ground up.</p>
+      <p class="about-body">Founded in 2026, we work at the intersection of mechanical design, embedded systems, and machine learning. We are open to students across all disciplines and experience levels.</p>
+      <span class="pill"><span class="pill-dot"></span>Independent initiative &mdash; EngSoc affiliation in progress</span>
+    </div>
+    <div class="about-rule"></div>
+    <div class="about-right r d1">
+      <div class="stat-list">
+        <div class="stat-item">
+          <span class="stat-val">20<b>26</b></span>
+          <span class="stat-desc">Year the team was founded</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-val">6</span>
+          <span class="stat-desc">Engineering and business subteams</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-val">#<b>1</b></span>
+          <span class="stat-desc">First full-scale student humanoid in Canada</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-val">UofT</span>
+          <span class="stat-desc">St. George Campus, Toronto</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="hr-purple"></div>
+
+<!-- SUBTEAMS -->
+<section class="section" id="subteams">
+  <div class="subteams-header r">
+    <p class="kicker">Divisions</p>
+    <h2 class="section-title">Our <b>Subteams</b></h2>
+  </div>
+  <div class="subteams-grid r d1">
+    <div class="subteam-card">
+      <span class="card-index">01 &mdash; Mechanical</span>
+      <h3 class="card-title">Mechanical Engineering</h3>
+      <p class="card-body">Structural design, actuator integration, and the full physical architecture of the humanoid platform. From skeletal geometry to surface finish and manufacturing.</p>
+      <div class="card-tags">
+        <span class="card-tag">SolidWorks</span>
+        <span class="card-tag">FEA</span>
+        <span class="card-tag">Actuators</span>
+        <span class="card-tag">Fabrication</span>
+        <span class="card-tag">GD&amp;T</span>
+      </div>
+    </div>
+    <div class="subteam-card">
+      <span class="card-index">02 &mdash; Electrical</span>
+      <h3 class="card-title">Electrical Engineering</h3>
+      <p class="card-body">Power architecture, PCB design, motor drivers, and the embedded hardware backbone that brings the robot to life and keeps it operating reliably.</p>
+      <div class="card-tags">
+        <span class="card-tag">PCB Design</span>
+        <span class="card-tag">Power Systems</span>
+        <span class="card-tag">Motor Drivers</span>
+        <span class="card-tag">Sensing</span>
+      </div>
+    </div>
+    <div class="subteam-card">
+      <span class="card-index">03 &mdash; Software</span>
+      <h3 class="card-title">Software Engineering</h3>
+      <p class="card-body">ROS 2, perception pipelines, and the high-level autonomy stack running on onboard NVIDIA Jetson compute. Building the brain of the robot.</p>
+      <div class="card-tags">
+        <span class="card-tag">ROS 2</span>
+        <span class="card-tag">Perception</span>
+        <span class="card-tag">Deep Learning</span>
+        <span class="card-tag">C++</span>
+        <span class="card-tag">Python</span>
+      </div>
+    </div>
+    <div class="subteam-card">
+      <span class="card-index">04 &mdash; Controls</span>
+      <h3 class="card-title">Controls Engineering</h3>
+      <p class="card-body">Whole-body dynamics, balance, gait generation, and the low-level control loops that make stable bipedal locomotion possible in real hardware.</p>
+      <div class="card-tags">
+        <span class="card-tag">MPC</span>
+        <span class="card-tag">Gait Planning</span>
+        <span class="card-tag">State Estimation</span>
+        <span class="card-tag">Sim-to-Real</span>
+      </div>
+    </div>
+    <div class="subteam-card">
+      <span class="card-index">05 &mdash; Business &amp; Sponsorship</span>
+      <h3 class="card-title">Business &amp; Sponsorship</h3>
+      <p class="card-body">Sponsorship acquisition, financial operations, industry partnerships, and the strategic relationships that fund the team's hardware and operations.</p>
+      <div class="card-tags">
+        <span class="card-tag">Sponsorship</span>
+        <span class="card-tag">Finance</span>
+        <span class="card-tag">Partnerships</span>
+        <span class="card-tag">Strategy</span>
+      </div>
+    </div>
+    <div class="subteam-card">
+      <span class="card-index">06 &mdash; Research</span>
+      <h3 class="card-title">Research</h3>
+      <p class="card-body">Applied research in locomotion, manipulation, and physical intelligence. Connecting the team's work to the broader academic and industry robotics community.</p>
+      <div class="card-tags">
+        <span class="card-tag">Locomotion</span>
+        <span class="card-tag">Manipulation</span>
+        <span class="card-tag">Publications</span>
+        <span class="card-tag">ML</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- SPONSORS -->
+<section class="section alt" id="sponsors">
+  <div class="sponsors-center">
+    <div class="r">
+      <p class="kicker" style="justify-content:center;">Partners</p>
+      <h2 class="section-title" style="text-align:center;"><b>Sponsors</b></h2>
+      <p class="sponsors-body">We are building something that has never been done at the student level in Canada. We are looking for industry partners who want to be part of it from the very beginning.</p>
+    </div>
+    <div class="coming-frame r">
+      <span class="coming-chip"><span class="pill-dot"></span>Coming Soon</span>
+      <h3 class="coming-head">Our Sponsor Roster is Being Built</h3>
+      <p class="coming-desc">If your organization wants early visibility into Canada's most ambitious student robotics project, we want to hear from you.</p>
+    </div>
+    <div class="r" style="display:flex;flex-direction:column;align-items:center;gap:.9rem;">
+      <p class="cta-sub">Become our founding sponsor</p>
+      <a class="btn-fill" href="mailto:hello@uthr.ca">Get in Touch</a>
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- JOIN -->
+<section class="section" id="join">
+  <div class="r" style="margin-bottom:5rem;">
+    <p class="kicker">Recruitment</p>
+    <h2 class="section-title">Join <b>the Team</b></h2>
+  </div>
+  <div class="join-layout">
+    <div class="join-sticky r">
+      <p class="join-pitch">We are looking for driven students from all disciplines who want to work on one of the most technically ambitious student projects in Canada. No prior experience required — only curiosity and commitment.</p>
+      <div class="reasons">
+        <div class="reason">
+          <span class="reason-mark"></span>
+          <span class="reason-text"><b>Real engineering.</b> Work on hardware and software that has never existed before at the student level in Canada.</span>
+        </div>
+        <div class="reason">
+          <span class="reason-mark"></span>
+          <span class="reason-text"><b>Early-stage impact.</b> Joining now means you help define the team's direction, culture, and technical roadmap from the ground up.</span>
+        </div>
+        <div class="reason">
+          <span class="reason-mark"></span>
+          <span class="reason-text"><b>All disciplines welcome.</b> Engineering, computer science, business, and beyond. If you are serious about the work, there is a place for you.</span>
+        </div>
+      </div>
+    </div>
+    <form class="form r d1" onsubmit="handleSubmit(event)">
+      <div class="f-row">
+        <div class="f-field">
+          <label class="f-label" for="fn">Full Name</label>
+          <input class="f-input" type="text" id="fn" placeholder="Your name" required/>
+        </div>
+        <div class="f-field">
+          <label class="f-label" for="fe">Email</label>
+          <input class="f-input" type="email" id="fe" placeholder="you@mail.utoronto.ca" required/>
+        </div>
+      </div>
+      <div class="f-row">
+        <div class="f-field">
+          <label class="f-label" for="fp">Program</label>
+          <input class="f-input" type="text" id="fp" placeholder="e.g. Mechanical Engineering"/>
+        </div>
+        <div class="f-field">
+          <label class="f-label" for="fy">Year of Study</label>
+          <select class="f-select" id="fy">
+            <option value="">Select year</option>
+            <option>1st Year</option>
+            <option>2nd Year</option>
+            <option>3rd Year</option>
+            <option>4th Year</option>
+            <option>Graduate</option>
+          </select>
+        </div>
+      </div>
+      <div class="f-row">
+        <div class="f-field">
+          <label class="f-label" for="ft">Subteam Interest</label>
+          <select class="f-select" id="ft">
+            <option value="">Select subteam</option>
+            <option>Mechanical Engineering</option>
+            <option>Electrical Engineering</option>
+            <option>Software Engineering</option>
+            <option>Controls Engineering</option>
+            <option>Business &amp; Sponsorship</option>
+            <option>Research</option>
+            <option>Not Sure Yet</option>
+          </select>
+        </div>
+        <div class="f-field">
+          <label class="f-label" for="fl">LinkedIn (optional)</label>
+          <input class="f-input" type="url" id="fl" placeholder="linkedin.com/in/yourname"/>
+        </div>
+      </div>
+      <div class="f-field">
+        <label class="f-label" for="fm">Why do you want to join UTHR?</label>
+        <textarea class="f-textarea" id="fm" placeholder="Tell us about yourself and what draws you to this project..."></textarea>
+      </div>
+      <div>
+        <button type="submit" class="btn-fill">Submit Application</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="f-logo">UT<b>HR</b></span>
+  <span class="f-tagline">Next Chapter of Physical Intelligence in Canada</span>
+  <ul class="f-nav">
+    <li><a href="#about">About</a></li>
+    <li><a href="#subteams">Subteams</a></li>
+    <li><a href="#sponsors">Sponsors</a></li>
+    <li><a href="#join">Join</a></li>
+    <li><a href="mailto:hello@uthr.ca">Contact</a></li>
+  </ul>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('stuck', scrollY > 50));
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.r').forEach(el => io.observe(el));
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type=submit]');
+    btn.textContent = 'Application Received';
+    btn.style.background = 'var(--violet)';
+    btn.style.color = '#fff';
+    btn.disabled = true;
+  }
+</script>
+</body>
+</html>
