@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" type="image/jpg" href="logo.jpg"/>
+<title> — UTHR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--black:#060509;--deep:#0a0812;--surface:#0f0d1a;--surf2:#141022;--line:rgba(255,255,255,0.07);--line-hi:rgba(255,255,255,0.13);--violet:#6d28d9;--bright:#8b5cf6;--lilac:#c4b5fd;--white:#ffffff;--off:#f0ecff;--mid:#8b85a0;--dim:#3d3955;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--black);color:var(--off);font-family:'Inter',-apple-system,sans-serif;font-weight:300;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+body::after{content:'';position:fixed;inset:0;z-index:996;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23g)'/%3E%3C/svg%3E");opacity:0.028;}
+nav{position:fixed;top:0;left:0;right:0;z-index:900;display:flex;align-items:center;justify-content:space-between;padding:1.5rem 3rem;transition:padding .4s,background .4s,border-color .4s;border-bottom:1px solid transparent;}
+nav.stuck{padding:1rem 3rem;background:rgba(6,5,9,0.92);backdrop-filter:blur(28px);border-color:var(--line);}
+.nav-logo{font-size:.75rem;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--white);text-decoration:none;}
+.nav-logo b{color:var(--lilac);}
+.nav-back{font-size:.68rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--mid);text-decoration:none;display:flex;align-items:center;gap:.5rem;transition:color .2s;}
+.nav-back:hover{color:var(--white);}
+.nav-btn{font-size:.68rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--off);border:1px solid var(--line-hi);padding:.55rem 1.4rem;text-decoration:none;transition:all .25s;background:none;}
+.nav-btn:hover{background:var(--white);color:var(--black);border-color:var(--white);}
+.hero{min-height:60vh;display:flex;flex-direction:column;justify-content:flex-end;padding:10rem 3rem 5rem;position:relative;overflow:hidden;}
+.hero-ambient{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 65% at 78% 15%,rgba(76,29,149,.45) 0%,transparent 58%);}
+.hero-grid{position:absolute;inset:0;overflow:hidden;opacity:.04;pointer-events:none;}
+.hero-grid::before{content:'';position:absolute;inset:-10%;background-image:linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);background-size:72px 72px;mask-image:radial-gradient(ellipse 70% 60% at 72% 25%,black 0%,transparent 75%);}
+.hero-content{position:relative;z-index:2;max-width:900px;}
+.hero-kicker{font-family:'Geist Mono',monospace;font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;color:var(--lilac);margin-bottom:1.2rem;display:flex;align-items:center;gap:.7rem;}
+.hero-kicker::before{content:'';width:20px;height:1px;background:var(--bright);}
+.hero-h1{font-size:clamp(3rem,7vw,6.5rem);font-weight:300;line-height:.95;letter-spacing:-.03em;color:var(--white);}
+.hero-h1 b{font-weight:600;}
+.hero-sub{margin-top:1.5rem;font-size:1.05rem;line-height:1.75;color:var(--mid);max-width:540px;}
+.hr{width:100%;height:1px;background:var(--line);}
+.section{padding:7rem 3rem;max-width:1100px;margin:0 auto;}
+.section-kicker{font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--lilac);display:flex;align-items:center;gap:.7rem;margin-bottom:1rem;}
+.section-kicker::before{content:'';width:20px;height:1px;background:var(--bright);opacity:.6;}
+.section-title{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:300;letter-spacing:-.03em;color:var(--white);margin-bottom:2.5rem;}
+.section-title b{font-weight:600;}
+.body-text{font-size:1rem;line-height:1.9;color:var(--mid);margin-bottom:1.4rem;font-weight:400;}
+.body-text b{color:var(--off);font-weight:500;}
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:3rem;}
+.pillar{background:var(--black);padding:2.5rem 2rem;transition:background .3s;position:relative;overflow:hidden;}
+.pillar::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,var(--violet),var(--lilac));transform:scaleX(0);transform-origin:left;transition:transform .4s cubic-bezier(.16,1,.3,1);}
+.pillar:hover{background:var(--surf2);}
+.pillar:hover::before{transform:scaleX(1);}
+.pillar-num{font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);margin-bottom:1rem;display:block;}
+.pillar-title{font-size:1rem;font-weight:600;color:var(--white);margin-bottom:.7rem;}
+.pillar-body{font-size:.85rem;line-height:1.7;color:var(--mid);}
+.tags{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:2.5rem;}
+.tag{font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;color:var(--lilac);border:1px solid rgba(196,181,253,.18);padding:.2rem .65rem;background:rgba(196,181,253,.04);}
+.contact-block{background:var(--surface);border:1px solid var(--line);padding:3.5rem;margin-top:5rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;}
+.contact-left h3{font-size:1.4rem;font-weight:600;letter-spacing:-.02em;color:var(--white);margin-bottom:.6rem;}
+.contact-left p{font-size:.92rem;color:var(--mid);line-height:1.6;}
+.btn-fill{font-size:.72rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;background:var(--white);color:var(--black);padding:.95rem 2.4rem;text-decoration:none;transition:all .25s;display:inline-block;white-space:nowrap;}
+.btn-fill:hover{background:var(--off);transform:translateY(-2px);}
+footer{border-top:1px solid var(--line);padding:2.8rem 3rem;display:flex;align-items:center;justify-content:space-between;margin-top:5rem;}
+.f-logo{font-size:.72rem;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--mid);}
+.f-logo b{color:var(--lilac);}
+.f-nav{display:flex;gap:2rem;list-style:none;}
+.f-nav a{font-size:.65rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);text-decoration:none;transition:color .2s;}
+.f-nav a:hover{color:var(--off);}
+.r{opacity:0;transform:translateY(24px);transition:opacity .75s ease,transform .75s ease;}
+.r.in{opacity:1;transform:none;}
+.r.d1{transition-delay:.1s;}
+.r.d2{transition-delay:.2s;}
+@media(max-width:900px){.pillars{grid-template-columns:1fr;}.contact-block{flex-direction:column;text-align:center;}.hero,.section{padding-left:1.5rem;padding-right:1.5rem;}nav{padding:1.1rem 1.5rem;}}
+</style>
+</head>
+<body>
+<nav id="nav">
+  <a class="nav-logo" href="index.html">UT<b>HR</b></a>
+  <a class="nav-back" href="index.html#subteams">← All Subteams</a>
+  <a class="nav-btn" href="index.html#join">Apply Now</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-ambient"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content" id="hero-content">
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<div class="section">
+  <div class="r" id="section-content">
+  </div>
+  <div class="contact-block r">
+    <div class="contact-left">
+      <h3>Have a Question?</h3>
+      <p>Reach out to us at any time. We are happy to answer questions about the subteam, our work, or how to get involved.</p>
+    </div>
+    <a class="btn-fill" href="mailto:uthr.uoft@gmail.com">uthr.uoft@gmail.com</a>
+  </div>
+</div>
+
+<footer>
+  <span class="f-logo">UT<b>HR</b></span>
+  <ul class="f-nav">
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#subteams">Subteams</a></li>
+    <li><a href="index.html#sponsors">Sponsors</a></li>
+    <li><a href="index.html#join">Join</a></li>
+  </ul>
+</footer>
+
+<script>
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('stuck', scrollY > 50));
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: 0.08 });
+document.querySelectorAll('.r').forEach(el => io.observe(el));
+
+const content = {
+  electrical: {
+    num: '02', title: 'Electrical<br/>Engineering',
+    sub: 'Designing the power systems, PCB hardware, and embedded electronics that give the robot its nervous system.',
+    sectionTitle: 'Powering the <b>Robot</b>',
+    body1: 'The Electrical subteam designs and builds all the hardware that makes the robot function at a low level. From <b>custom PCBs</b> to motor drivers, power distribution, and sensor integration, we are responsible for the electronics that connect software commands to physical motion.',
+    body2: 'We work hand in hand with the Mechanical and Software teams to ensure our boards fit within tight enclosures and our interfaces match the software stack. Every circuit we design has to be reliable, compact, and robust enough to survive the dynamics of a walking robot.',
+    pillars: [
+      {num:'01', title:'PCB Design', body:'Designing custom circuit boards for motor control, power distribution, and sensor integration using tools like KiCad.'},
+      {num:'02', title:'Power Systems', body:'Architecting safe and efficient power delivery from battery to actuators, ensuring stable operation across all load conditions.'},
+      {num:'03', title:'Embedded Hardware', body:'Selecting and integrating microcontrollers, IMUs, encoders, and communication interfaces that form the robot\'s sensory system.'}
+    ],
+    tags: ['PCB Design','KiCad','Power Systems','Motor Drivers','Embedded HW','Sensing','CAN Bus','STM32']
+  },
+  software: {
+    num: '03', title: 'Software<br/>Engineering',
+    sub: 'Building the autonomy stack, perception pipelines, and high-level intelligence that runs on the robot\'s onboard compute.',
+    sectionTitle: 'The Brain of the <b>Robot</b>',
+    body1: 'The Software subteam builds everything from the robot operating system layer up to high-level decision making. We work in <b>ROS 2</b>, writing nodes for perception, state estimation, and task execution that run on the onboard NVIDIA Jetson compute.',
+    body2: 'Our work connects closely with the Controls team, providing them with accurate state estimates and receiving their low-level commands. We also develop simulation environments that allow the whole team to test software before it runs on real hardware.',
+    pillars: [
+      {num:'01', title:'ROS 2 Stack', body:'Architecting and maintaining the full Robot Operating System 2 stack, including nodes, topics, and services across all subsystems.'},
+      {num:'02', title:'Perception', body:'Building vision and sensor fusion pipelines that let the robot understand its environment in real time.'},
+      {num:'03', title:'Simulation', body:'Developing Gazebo and MuJoCo simulation environments for safe software testing before hardware deployment.'}
+    ],
+    tags: ['ROS 2','C++','Python','Perception','Deep Learning','NVIDIA Jetson','Gazebo','MuJoCo']
+  },
+  controls: {
+    num: '04', title: 'Controls<br/>Engineering',
+    sub: 'Developing the whole-body controllers, gait planners, and state estimators that make bipedal locomotion stable and reliable.',
+    sectionTitle: 'Making the Robot <b>Walk</b>',
+    body1: 'The Controls subteam owns the hardest problem in humanoid robotics: keeping a bipedal robot upright and moving. We develop <b>whole-body controllers</b>, gait planners, and real-time state estimators that run on embedded hardware with strict latency requirements.',
+    body2: 'Our work sits at the intersection of dynamics, optimization, and real-time embedded systems. We use tools like <b>Model Predictive Control</b> and reinforcement learning in simulation to develop controllers that transfer to real hardware through careful sim-to-real tuning.',
+    pillars: [
+      {num:'01', title:'Whole-Body Control', body:'Formulating and solving real-time optimization problems that coordinate all the robot\'s joints to achieve stable, dynamic motion.'},
+      {num:'02', title:'Gait Planning', body:'Developing footstep planners and trajectory generators that produce stable, natural walking gaits across varying terrain.'},
+      {num:'03', title:'State Estimation', body:'Fusing IMU, encoder, and vision data to produce accurate real-time estimates of the robot\'s pose and velocity.'}
+    ],
+    tags: ['MPC','Gait Planning','State Estimation','Sim-to-Real','MATLAB','C++','Reinforcement Learning','Dynamics']
+  },
+  business: {
+    num: '05', title: 'Business &<br/>Sponsorship',
+    sub: 'Building the partnerships, financial infrastructure, and strategic relationships that fund and support everything UTHR does.',
+    sectionTitle: 'Funding the <b>Mission</b>',
+    body1: 'The Business and Sponsorship subteam is responsible for the operational and financial foundation that makes everything else possible. We manage <b>sponsor relationships</b>, lead outreach to industry partners, handle the team\'s finances, and ensure UTHR has the resources it needs to build.',
+    body2: 'This is not a passive support role. We are actively building UTHR\'s industry network from scratch, crafting sponsorship packages, managing budgets, and representing the team to external stakeholders. Strong communication and strategic thinking are as important here as technical skills are elsewhere on the team.',
+    pillars: [
+      {num:'01', title:'Sponsorship', body:'Identifying, reaching out to, and securing industry sponsors who provide financial support, components, software licenses, and mentorship.'},
+      {num:'02', title:'Finance', body:'Managing the team\'s budget, tracking expenditures, and ensuring responsible use of sponsor funds across all subteams.'},
+      {num:'03', title:'Partnerships', body:'Building long-term relationships with companies, labs, and institutions that create opportunities beyond direct funding.'}
+    ],
+    tags: ['Sponsorship','Finance','Strategy','Outreach','Partnerships','Operations','Communications']
+  },
+  research: {
+    num: '06', title: 'Research',
+    sub: 'Conducting applied research in locomotion, manipulation, and physical intelligence, and connecting our work to the broader robotics community.',
+    sectionTitle: 'Pushing the <b>Frontier</b>',
+    body1: 'The Research subteam drives the academic and intellectual side of UTHR. We conduct applied research in areas like <b>bipedal locomotion</b>, dexterous manipulation, and physical intelligence, and we connect the team\'s engineering work to the latest developments in the robotics research community.',
+    body2: 'We read papers, run experiments, write up findings, and build the knowledge base that informs the technical decisions made across all other subteams. Our goal is to eventually produce publishable work that establishes UTHR as a contributor to the global robotics research community, not just a builder.',
+    pillars: [
+      {num:'01', title:'Locomotion Research', body:'Studying and applying the latest methods in bipedal locomotion, from classical dynamics to learning-based approaches.'},
+      {num:'02', title:'Manipulation', body:'Exploring how humanoid robots can interact with objects and environments in useful and generalizable ways.'},
+      {num:'03', title:'Publications', body:'Writing up findings from our experiments and engineering work with the goal of contributing to robotics conferences and journals.'}
+    ],
+    tags: ['Locomotion','Manipulation','Deep Learning','ML','Publications','Research Methods','Python','PyTorch']
+  }
+};
+
+const key = 'business';
+const d = content[key];
+
+document.getElementById('hero-content').innerHTML = `
+  <p class="hero-kicker">${d.num} — Subteam</p>
+  <h1 class="hero-h1"><b>${d.title.split('<br/>')[0]}</b><br/>${d.title.split('<br/>')[1]}</h1>
+  <p class="hero-sub">${d.sub}</p>
+`;
+
+document.getElementById('section-content').innerHTML = `
+  <p class="section-kicker">What We Do</p>
+  <h2 class="section-title">${d.sectionTitle}</h2>
+  <p class="body-text">${d.body1}</p>
+  <p class="body-text">${d.body2}</p>
+  <div class="pillars">
+    ${d.pillars.map(p => `<div class="pillar"><span class="pillar-num">${p.num}</span><h4 class="pillar-title">${p.title}</h4><p class="pillar-body">${p.body}</p></div>`).join('')}
+  </div>
+  <div class="tags">
+    ${d.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+  </div>
+`;
+</script>
+</body>
+</html>
