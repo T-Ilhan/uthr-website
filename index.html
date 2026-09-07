@@ -134,27 +134,6 @@ nav.stuck{padding:1rem 3rem;background:rgba(6,5,9,0.92);backdrop-filter:blur(28p
 .coming-desc{font-size:.92rem;line-height:1.75;color:var(--mid);max-width:400px;margin:0 auto;}
 .cta-sub{font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);margin-bottom:.9rem;}
 
-/* JOIN */
-.join-layout{display:grid;grid-template-columns:1fr 1fr;gap:8rem;align-items:start;max-width:1200px;}
-.join-sticky{position:sticky;top:7rem;}
-.join-pitch{font-size:1rem;line-height:1.85;color:var(--mid);margin-bottom:2.5rem;font-weight:400;}
-.reasons{display:flex;flex-direction:column;}
-.reason{display:flex;gap:1.2rem;padding:1.4rem 0;border-bottom:1px solid var(--line);}
-.reason:first-child{border-top:1px solid var(--line);}
-.reason-mark{width:5px;height:5px;border-radius:50%;background:var(--bright);flex-shrink:0;margin-top:.45rem;}
-.reason-text{font-size:.9rem;color:var(--mid);line-height:1.65;}
-.reason-text b{color:var(--off);font-weight:500;}
-
-.form{display:flex;flex-direction:column;gap:1.3rem;}
-.f-row{display:grid;grid-template-columns:1fr 1fr;gap:1.3rem;}
-.f-field{display:flex;flex-direction:column;gap:.5rem;}
-.f-label{font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--lilac);}
-.f-input,.f-select,.f-textarea{background:rgba(255,255,255,.03);border:1px solid var(--line);color:var(--off);padding:.88rem 1rem;font-family:'Inter',sans-serif;font-size:.9rem;font-weight:400;outline:none;transition:border-color .2s,background .2s;width:100%;appearance:none;}
-.f-input::placeholder,.f-textarea::placeholder{color:var(--dim);}
-.f-input:focus,.f-select:focus,.f-textarea:focus{border-color:rgba(139,92,246,.45);background:rgba(255,255,255,.05);}
-.f-select option{background:var(--deep);}
-.f-textarea{resize:vertical;min-height:115px;}
-
 /* FOOTER */
 footer{border-top:1px solid var(--line);padding:2.8rem 3rem;display:flex;align-items:center;justify-content:space-between;}
 .f-logo{font-size:.72rem;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--mid);}
@@ -173,8 +152,6 @@ footer{border-top:1px solid var(--line);padding:2.8rem 3rem;display:flex;align-i
 /* RESPONSIVE */
 @media(max-width:1024px){
   .subteams-grid{grid-template-columns:repeat(2,1fr);}
-  .join-layout{grid-template-columns:1fr;gap:4rem;}
-  .join-sticky{position:static;}
   .about-wrap{grid-template-columns:1fr;}
   .about-rule{display:none;}
   .about-left{padding-right:0;margin-bottom:4rem;}
@@ -192,7 +169,6 @@ footer{border-top:1px solid var(--line);padding:2.8rem 3rem;display:flex;align-i
 }
 @media(max-width:560px){
   .subteams-grid{grid-template-columns:1fr;}
-  .f-row{grid-template-columns:1fr;}
   .hero-ctas{flex-direction:column;align-items:flex-start;}
 }
 </style>
@@ -206,9 +182,8 @@ footer{border-top:1px solid var(--line);padding:2.8rem 3rem;display:flex;align-i
     <li><a href="#about">About</a></li>
     <li><a href="#subteams">Subteams</a></li>
     <li><a href="#sponsors">Sponsors</a></li>
-    <li><a href="#join">Join Us</a></li>
   </ul>
-  <a class="nav-btn" href="#join">Apply Now</a>
+  <a class="nav-btn" href="mailto:uthr.uoft@gmail.com">Contact Us</a>
 </nav>
 
 <!-- HERO -->
@@ -228,7 +203,7 @@ footer{border-top:1px solid var(--line);padding:2.8rem 3rem;display:flex;align-i
     <p class="hero-tagline">Next Chapter of Physical Intelligence in Canada</p>
     <p class="hero-sub">A student-led engineering team building University of Toronto's first full-scale bipedal humanoid robot.</p>
     <div class="hero-ctas">
-      <a class="btn-fill" href="#join">Join the Team</a>
+      <a class="btn-fill" href="mailto:uthr.uoft@gmail.com">Get in Touch</a>
       <a class="btn-outline" href="#about">Learn More</a>
     </div>
   </div>
@@ -392,90 +367,6 @@ footer{border-top:1px solid var(--line);padding:2.8rem 3rem;display:flex;align-i
   </div>
 </section>
 
-<div class="hr"></div>
-
-<!-- JOIN -->
-<section class="section" id="join">
-  <div class="r" style="margin-bottom:5rem;">
-    <p class="kicker">Recruitment</p>
-    <h2 class="section-title">Join <b>the Team</b></h2>
-  </div>
-  <div class="join-layout">
-    <div class="join-sticky r">
-      <p class="join-pitch">We are looking for driven students from all disciplines who want to work on one of the most technically ambitious student projects in Canada. No prior experience required — only curiosity and commitment.</p>
-      <div class="reasons">
-        <div class="reason">
-          <span class="reason-mark"></span>
-          <span class="reason-text"><b>Real engineering.</b> Work on hardware and software that has never existed before at the student level in Canada.</span>
-        </div>
-        <div class="reason">
-          <span class="reason-mark"></span>
-          <span class="reason-text"><b>Early-stage impact.</b> Joining now means you help define the team's direction, culture, and technical roadmap from the ground up.</span>
-        </div>
-        <div class="reason">
-          <span class="reason-mark"></span>
-          <span class="reason-text"><b>All disciplines welcome.</b> Engineering, computer science, business, and beyond. If you are serious about the work, there is a place for you.</span>
-        </div>
-      </div>
-    </div>
-    <form class="form r d1" id="uthr-form">
-      <div class="f-row">
-        <div class="f-field">
-          <label class="f-label" for="fn">Full Name</label>
-          <input class="f-input" type="text" id="fn" placeholder="Your name" required/>
-        </div>
-        <div class="f-field">
-          <label class="f-label" for="fe">Email</label>
-          <input class="f-input" type="email" id="fe" placeholder="you@mail.utoronto.ca" required/>
-        </div>
-      </div>
-      <div class="f-row">
-        <div class="f-field">
-          <label class="f-label" for="fp">Program</label>
-          <input class="f-input" type="text" id="fp" placeholder="e.g. Mechanical Engineering"/>
-        </div>
-        <div class="f-field">
-          <label class="f-label" for="fy">Year of Study</label>
-          <select class="f-select" id="fy">
-            <option value="">Select year</option>
-            <option>1st Year</option>
-            <option>2nd Year</option>
-            <option>3rd Year</option>
-            <option>4th Year</option>
-            <option>Graduate</option>
-          </select>
-        </div>
-      </div>
-      <div class="f-row">
-        <div class="f-field">
-          <label class="f-label" for="ft">Subteam Interest</label>
-          <select class="f-select" id="ft">
-            <option value="">Select subteam</option>
-            <option>Mechanical Engineering</option>
-            <option>Electrical Engineering</option>
-            <option>Software Engineering</option>
-            <option>Controls Engineering</option>
-            <option>Business &amp; Sponsorship</option>
-            <option>Research</option>
-            <option>Not Sure Yet</option>
-          </select>
-        </div>
-        <div class="f-field">
-          <label class="f-label" for="fl">LinkedIn (optional)</label>
-          <input class="f-input" type="url" id="fl" placeholder="linkedin.com/in/yourname"/>
-        </div>
-      </div>
-      <div class="f-field">
-        <label class="f-label" for="fm">Why do you want to join UTHR?</label>
-        <textarea class="f-textarea" id="fm" placeholder="Tell us about yourself and what draws you to this project..."></textarea>
-      </div>
-      <div>
-        <button type="submit" class="btn-fill">Submit Application</button>
-      </div>
-    </form>
-  </div>
-</section>
-
 <!-- FOOTER -->
 <footer>
   <span class="f-logo">UT<b>HR</b></span>
@@ -484,7 +375,6 @@ footer{border-top:1px solid var(--line);padding:2.8rem 3rem;display:flex;align-i
     <li><a href="#about">About</a></li>
     <li><a href="#subteams">Subteams</a></li>
     <li><a href="#sponsors">Sponsors</a></li>
-    <li><a href="#join">Join</a></li>
     <li><a href="mailto:uthr.uoft@gmail.com">Contact</a></li>
   </ul>
 </footer>
@@ -497,38 +387,6 @@ footer{border-top:1px solid var(--line);padding:2.8rem 3rem;display:flex;align-i
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: 0.08 });
   document.querySelectorAll('.r').forEach(el => io.observe(el));
-
-  document.getElementById('uthr-form').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const btn = this.querySelector('button[type=submit]');
-  btn.textContent = 'Sending...';
-  btn.disabled = true;
-
-  const data = {
-    name: document.getElementById('fn').value,
-    email: document.getElementById('fe').value,
-    program: document.getElementById('fp').value,
-    year: document.getElementById('fy').value,
-    subteam: document.getElementById('ft').value,
-    linkedin: document.getElementById('fl').value,
-    message: document.getElementById('fm').value,
-  };
-
-  const res = await fetch('https://formspree.io/f/xojyadeo', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-    body: JSON.stringify(data)
-  });
-
-  if (res.ok) {
-    btn.textContent = 'Application Received';
-    btn.style.background = 'var(--violet)';
-    btn.style.color = '#fff';
-  } else {
-    btn.textContent = 'Something went wrong — try again';
-    btn.disabled = false;
-  }
-});
 </script>
 </body>
 </html>
